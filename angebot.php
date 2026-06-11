@@ -227,7 +227,7 @@ $pageDesc  = $v ? $v['tagline'] : 'Ferienhaus auf Rügen anfragen.';
 <!-- Minimale Nav (kein Ablenkungsmenü) -->
 <nav class="mini-nav">
   <a href="<?= $baseUrl ?>/" class="brand">Ferienhaus Rügen mit Hund</a>
-  <a href="<?= $baseUrl ?>/haeuser.php">← Alle Villen</a>
+  <span></span>
 </nav>
 
 <?php if (!$v): ?>
