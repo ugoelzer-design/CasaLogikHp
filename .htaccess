@@ -3,6 +3,11 @@ Options -Indexes
 # ACME Challenge (Let's Encrypt) ausschließen
 RewriteEngine On
 RewriteRule ^\.well-known/ - [L]
+
+# HTTPS erzwingen (über X-Forwarded-Proto von Traefik/Coolify)
+RewriteCond %{HTTP:X-Forwarded-Proto} =http
+RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
 RewriteCond %{REQUEST_FILENAME} !-f
 RewriteCond %{REQUEST_FILENAME} !-d
 RewriteRule ^([^.]+)$ $1.php [L]
