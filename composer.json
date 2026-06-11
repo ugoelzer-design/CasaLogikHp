@@ -1,0 +1,10 @@
+{
+    "name": "casalogik/ferienhaus-hp",
+    "description": "Ferienhaus Rügen mit Hund – statische Marketing-HP",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "config": {
+        "optimize-autoloader": true
+    }
+}

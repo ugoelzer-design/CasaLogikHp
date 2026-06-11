@@ -1,0 +1,26 @@
+# Abhängigkeiten
+/vendor/
+
+# Umgebungsvariablen
+.env
+.env.local
+.env.production
+
+# Composer lock (optional – einchecken wenn reproducible builds gewünscht)
+# composer.lock
+
+# Logs
+*.log
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Uploads / temporäre Dateien
+/tmp/
+/uploads/
+
+# Docker-Override (lokale Anpassungen)
+docker-compose.override.yml
