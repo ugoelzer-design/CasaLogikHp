@@ -90,7 +90,7 @@ $villas = [
     'usp' => [
       ['icon'=>'🚿', 'title'=>'3 Bäder',        'text'=>'Kein Morgen-Stau. Jedes Zimmer fast mit eigenem Bad – Urlaub ohne Kompromisse.'],
       ['icon'=>'👨‍👩‍👧‍👦', 'title'=>'Ideal für Gruppen', 'text'=>'3 Schlafzimmer, 3 Bäder, Platz für 6 – perfekt für Familien oder Freundesgruppen.'],
-      ['icon'=>'🐾', 'title'=>'Hund willkommen', 'text'=>'Außendusche, Teileinzäunung, hundefreundlich durch und durch.'],
+      ['icon'=>'🐾', 'title'=>'Hund willkommen', 'text'=>'Teileinzäunung, hundefreundlich durch und durch.'],
     ],
     'why' => 'Rotdorn ist für Gäste, die Komfort mögen: drei Bäder, kurze Wege, entspannter Start in den Tag – unkompliziert mit Hund.',
   ],
