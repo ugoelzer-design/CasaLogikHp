@@ -1,0 +1,16 @@
+{
+  "images": [
+    "/assets/haeuser/villa-rotdorn-main.jpg",
+    "/assets/haeuser/rotdorn-02.jpg",
+    "/assets/haeuser/rotdorn-03.jpg"
+  ],
+  "video_url": "",
+  "reviews": [
+    {
+      "name": "Thomas & Gruppe",
+      "datum": "Juni 2024",
+      "text": "Drei Bäder für sechs Leute – genau das haben wir gebraucht. Tolle Lage, sehr sauber.",
+      "sterne": 5
+    }
+  ]
+}

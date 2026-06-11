@@ -1,0 +1,16 @@
+{
+  "images": [
+    "/assets/haeuser/sanddorn-01.jpg",
+    "/assets/haeuser/sanddorn-02.jpg",
+    "/assets/haeuser/sanddorn-03.jpg"
+  ],
+  "video_url": "",
+  "reviews": [
+    {
+      "name": "Familie M.",
+      "datum": "August 2024",
+      "text": "Wunderschönes Haus, perfekt für uns mit zwei Hunden. Die Sauna war jeden Abend ein Highlight.",
+      "sterne": 5
+    }
+  ]
+}

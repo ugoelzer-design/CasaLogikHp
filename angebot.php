@@ -98,6 +98,15 @@ $villas = [
 
 $v = $villas[$villaKey] ?? null;
 
+// ── _data JSON laden ─────────────────────────────────────────────
+$data = ['images' => [], 'video_url' => '', 'reviews' => []];
+if ($villaKey) {
+    $jsonFile = __DIR__ . '/_data/' . $villaKey . '.json';
+    if (file_exists($jsonFile)) {
+        $data = array_merge($data, json_decode(file_get_contents($jsonFile), true) ?? []);
+    }
+}
+
 // ── Nächte berechnen ─────────────────────────────────────────────
 $naechte = 0;
 $anreiseFormatted = $anreise;
@@ -212,6 +221,52 @@ $pageDesc  = $v ? $v['tagline'] : 'Ferienhaus auf Rügen anfragen.';
       .anfrage-card { position: static; }
     }
 
+    /* Galerie */
+    .galerie {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 6px; margin-bottom: 32px;
+      border-radius: var(--radius); overflow: hidden;
+      max-height: 420px;
+    }
+    .galerie img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block; cursor: pointer;
+    }
+    .galerie-side { display: grid; grid-template-rows: 1fr 1fr; gap: 6px; }
+    @media(max-width:600px) {
+      .galerie { grid-template-columns: 1fr; max-height: none; }
+      .galerie-side { grid-template-rows: auto; grid-template-columns: 1fr 1fr; }
+    }
+
+    /* Lightbox */
+    #lightbox {
+      display: none; position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,.92); align-items: center; justify-content: center;
+    }
+    #lightbox.open { display: flex; }
+    #lightbox img { max-width: 92vw; max-height: 88vh; border-radius: 8px; }
+    #lightbox-close {
+      position: absolute; top: 20px; right: 24px;
+      color: #fff; font-size: 32px; cursor: pointer; line-height: 1;
+    }
+
+    /* Video */
+    .video-wrap {
+      position: relative; padding-bottom: 56.25%; height: 0;
+      border-radius: var(--radius); overflow: hidden; margin-bottom: 32px;
+    }
+    .video-wrap iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+
+    /* Reviews */
+    .review-card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 18px 20px;
+    }
+    .review-card .stars { color: #f59e0b; font-size: 16px; margin-bottom: 8px; }
+    .review-card p { font-size: 15px; color: #374151; line-height: 1.65; font-style: italic; margin-bottom: 10px; }
+    .review-card .meta { font-size: 13px; color: var(--muted); }
+
     .mini-nav {
       background: var(--green);
       padding: 14px 20px;
@@ -261,6 +316,53 @@ $pageDesc  = $v ? $v['tagline'] : 'Ferienhaus auf Rügen anfragen.';
       <!-- Linke Spalte: Inhalte -->
       <div>
 
+        <!-- Bildergalerie -->
+        <?php
+        $imgs = array_filter($data['images'], fn($i) => file_exists(__DIR__ . $i));
+        if (count($imgs) >= 1):
+            $imgs = array_values($imgs);
+        ?>
+        <div class="galerie">
+          <img src="<?= htmlspecialchars($baseUrl . $imgs[0], ENT_QUOTES, 'UTF-8') ?>"
+               alt="<?= htmlspecialchars($v['name'], ENT_QUOTES, 'UTF-8') ?> Foto 1"
+               onclick="openLightbox(this.src)">
+          <?php if (count($imgs) >= 3): ?>
+          <div class="galerie-side">
+            <img src="<?= htmlspecialchars($baseUrl . $imgs[1], ENT_QUOTES, 'UTF-8') ?>"
+                 alt="Foto 2" onclick="openLightbox(this.src)">
+            <img src="<?= htmlspecialchars($baseUrl . $imgs[2], ENT_QUOTES, 'UTF-8') ?>"
+                 alt="Foto 3" onclick="openLightbox(this.src)">
+          </div>
+          <?php elseif (count($imgs) === 2): ?>
+          <div class="galerie-side">
+            <img src="<?= htmlspecialchars($baseUrl . $imgs[1], ENT_QUOTES, 'UTF-8') ?>"
+                 alt="Foto 2" onclick="openLightbox(this.src)" style="height:100%">
+          </div>
+          <?php endif ?>
+        </div>
+        <?php elseif ($v): ?>
+        <!-- Kein Bild: Gradient-Placeholder -->
+        <div style="background:<?= htmlspecialchars($v['gradient'], ENT_QUOTES, 'UTF-8') ?>;height:220px;border-radius:var(--radius);margin-bottom:32px"></div>
+        <?php endif ?>
+
+        <!-- Video -->
+        <?php if (!empty($data['video_url'])): ?>
+        <?php
+        $videoId = '';
+        if (preg_match('/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]{11})/', $data['video_url'], $m)) {
+            $videoId = $m[1];
+        }
+        ?>
+        <?php if ($videoId): ?>
+        <h3 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px">Video</h3>
+        <div class="video-wrap" style="margin-bottom:32px">
+          <iframe src="https://www.youtube-nocookie.com/embed/<?= htmlspecialchars($videoId, ENT_QUOTES, 'UTF-8') ?>?rel=0"
+                  title="<?= htmlspecialchars($v['name'], ENT_QUOTES, 'UTF-8') ?> Video"
+                  allowfullscreen loading="lazy"></iframe>
+        </div>
+        <?php endif ?>
+        <?php endif ?>
+
         <!-- Badge -->
         <p style="color:var(--accent);font-weight:700;font-size:14px;margin-bottom:16px;letter-spacing:.04em">
           <?= htmlspecialchars($v['qm'], ENT_QUOTES, 'UTF-8') ?> &nbsp;·&nbsp;
@@ -294,6 +396,20 @@ $pageDesc  = $v ? $v['tagline'] : 'Ferienhaus auf Rügen anfragen.';
             <span class="chip"><?= htmlspecialchars($h, ENT_QUOTES, 'UTF-8') ?></span>
           <?php endforeach ?>
         </div>
+
+        <!-- Bewertungen -->
+        <?php if (!empty($data['reviews'])): ?>
+        <h3 style="font-size:16px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-bottom:12px">Was Gäste sagen</h3>
+        <div style="display:grid;gap:12px;margin-bottom:32px">
+          <?php foreach ($data['reviews'] as $r): ?>
+          <div class="review-card">
+            <div class="stars"><?= str_repeat('★', (int)($r['sterne'] ?? 5)) ?></div>
+            <p>"<?= htmlspecialchars($r['text'] ?? '', ENT_QUOTES, 'UTF-8') ?>"</p>
+            <div class="meta"><?= htmlspecialchars($r['name'] ?? '', ENT_QUOTES, 'UTF-8') ?> &nbsp;·&nbsp; <?= htmlspecialchars($r['datum'] ?? '', ENT_QUOTES, 'UTF-8') ?></div>
+          </div>
+          <?php endforeach ?>
+        </div>
+        <?php endif ?>
 
         <!-- Vertrauens-Abschnitt -->
         <div style="background:var(--green-light);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px">
@@ -374,5 +490,20 @@ $pageDesc  = $v ? $v['tagline'] : 'Ferienhaus auf Rügen anfragen.';
   <span style="display:block;margin-top:6px;font-size:12px">© <?= date('Y') ?> Ferienhaus Rügen mit Hund</span>
 </footer>
 
+<!-- Lightbox -->
+<div id="lightbox" onclick="closeLightbox()">
+  <span id="lightbox-close" onclick="closeLightbox()">✕</span>
+  <img id="lightbox-img" src="" alt="Foto">
+</div>
+<script>
+function openLightbox(src) {
+  document.getElementById('lightbox-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
 </body>
 </html>

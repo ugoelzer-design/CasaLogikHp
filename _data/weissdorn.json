@@ -1,0 +1,15 @@
+{
+  "images": [
+    "/assets/haeuser/weissdorn-01.jpg",
+    "/assets/haeuser/weissdorn-02.jpg"
+  ],
+  "video_url": "",
+  "reviews": [
+    {
+      "name": "Petra K.",
+      "datum": "Juli 2024",
+      "text": "Ruhige Lage, helles Haus, der Wintergarten ist der Hammer. Gerne wieder.",
+      "sterne": 5
+    }
+  ]
+}
